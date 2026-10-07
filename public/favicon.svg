@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <defs>
+    <!-- Background Gradient: Deep Obsidian Forest -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#042218" />
+      <stop offset="100%" stop-color="#02140d" />
+    </linearGradient>
+
+    <!-- Subtle Center Radial Glow -->
+    <radialGradient id="vGlow" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Left Arm Gradient: Radiant Mint to Emerald -->
+    <linearGradient id="leftArm" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+
+    <!-- Right Arm Gradient: Emerald to Deep Forest -->
+    <linearGradient id="rightArm" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+
+  <!-- Squircle Base with Emerald Border -->
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#bgGrad)" stroke="#10b981" stroke-opacity="0.35" stroke-width="2" />
+  
+  <!-- Ambient Glow -->
+  <circle cx="32" cy="32" r="24" fill="url(#vGlow)" />
+
+  <!-- Iconic Valeris "V" Dual-Pill Arms -->
+  <!-- Left Arm (Vibrant Mint Emerald) -->
+  <line
+    x1="18.5"
+    y1="15"
+    x2="29"
+    y2="46"
+    stroke="url(#leftArm)"
+    stroke-width="7.5"
+    stroke-linecap="round"
+  />
+
+  <!-- Right Arm (Deep Forest Emerald) -->
+  <line
+    x1="45.5"
+    y1="15"
+    x2="35"
+    y2="46"
+    stroke="url(#rightArm)"
+    stroke-width="7.5"
+    stroke-linecap="round"
+  />
+</svg>
