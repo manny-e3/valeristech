@@ -1,503 +1,408 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import PageBanner from '../components/PageBanner';
-import {
-  Sparkles,
-  ArrowRight,
-  CheckCircle2,
-  ShieldCheck,
-  Sliders,
-  Cpu,
-  Eye,
-  Layers,
-  Network,
-  Lock,
-  TrendingUp,
-  Database,
-  Terminal,
-  Zap,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  Users,
-  Building2,
-  Check,
-  Smartphone,
-  BarChart3,
-  Landmark,
-  UserCheck
-} from 'lucide-react';
-
-/**
- * Pure code reproduction of the SAFI Brand Mark
- */
-export function SafiBrandMark({ light = true, size = 'default' }) {
-  const isLarge = size === 'large';
-  return (
-    <div style={{ display: 'inline-flex', flexDirection: 'column' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: isLarge ? '4px' : '2px' }}>
-        <span style={{
-          fontFamily: 'var(--font-main)',
-          fontWeight: 900,
-          fontSize: isLarge ? '2rem' : '1.4rem',
-          letterSpacing: '-0.02em',
-          color: light ? '#ffffff' : '#041c14',
-          lineHeight: 1
-        }}>
-          S
-        </span>
-        <span style={{
-          fontFamily: 'var(--font-main)',
-          fontWeight: 900,
-          fontSize: isLarge ? '2rem' : '1.4rem',
-          letterSpacing: '-0.02em',
-          color: light ? '#ffffff' : '#041c14',
-          lineHeight: 1,
-          position: 'relative'
-        }}>
-          A
-        </span>
-        <span style={{
-          fontFamily: 'var(--font-main)',
-          fontWeight: 900,
-          fontSize: isLarge ? '2rem' : '1.4rem',
-          letterSpacing: '-0.02em',
-          color: light ? '#ffffff' : '#041c14',
-          lineHeight: 1
-        }}>
-          F
-        </span>
-        <span style={{
-          position: 'relative',
-          display: 'inline-block',
-          fontFamily: 'var(--font-main)',
-          fontWeight: 900,
-          fontSize: isLarge ? '2rem' : '1.4rem',
-          letterSpacing: '-0.02em',
-          color: light ? '#ffffff' : '#041c14',
-          lineHeight: 1
-        }}>
-          I
-          <span style={{
-            position: 'absolute',
-            top: isLarge ? '-4px' : '-3px',
-            right: isLarge ? '1px' : '0px',
-            width: isLarge ? '7px' : '5px',
-            height: isLarge ? '7px' : '5px',
-            borderRadius: '50%',
-            background: '#10b981',
-          }} />
-        </span>
-      </div>
-      <span style={{
-        fontSize: isLarge ? '0.72rem' : '0.62rem',
-        fontWeight: 600,
-        color: light ? '#94a3b8' : '#64748b',
-        letterSpacing: '0.04em',
-        marginTop: '2px'
-      }}>
-        by Valeris Technologies
-      </span>
-    </div>
-  );
-}
-
-/**
- * Pure code reproduction of the SAFI App Icon Badge (from Slides 01 and 04)
- */
-export function SafiAppIcon({ size = 56 }) {
-  return (
-    <div style={{
-      width: `${size}px`,
-      height: `${size}px`,
-      borderRadius: `${size * 0.28}px`,
-      background: 'linear-gradient(145deg, #072e21 0%, #031811 100%)',
-      border: '1.5px solid rgba(16, 185, 129, 0.4)',
-      boxShadow: '0 12px 28px rgba(0, 0, 0, 0.35)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'relative',
-      flexShrink: 0
-    }}>
-      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <span style={{
-          fontSize: `${size * 0.58}px`,
-          fontWeight: 900,
-          color: '#ffffff',
-          fontFamily: 'var(--font-main)',
-          lineHeight: 1,
-          letterSpacing: '-0.05em'
-        }}>
-          S
-        </span>
-        {/* Vibrant emerald dot at the lower curve */}
-        <span style={{
-          position: 'absolute',
-          bottom: `${size * 0.08}px`,
-          left: `-${size * 0.14}px`,
-          width: `${size * 0.22}px`,
-          height: `${size * 0.22}px`,
-          borderRadius: '50%',
-          background: '#10b981',
-          boxShadow: '0 0 10px rgba(16, 185, 129, 0.8)'
-        }} />
-      </div>
-    </div>
-  );
-}
+import { ArrowRight, CheckCircle2, ChevronDown, ChevronUp, Sparkles, Building2, Shield, Lock, Layers } from 'lucide-react';
 
 export default function SafiPage() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [openFaq, setOpenFaq] = useState(0);
-
-  const totalSlides = 5;
-
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % totalSlides);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    source: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  const [responseMsg, setResponseMsg] = useState('');
+  const [showBudgetingModal, setShowBudgetingModal] = useState(false);
+  const [showTechAccordion, setShowTechAccordion] = useState(false);
 
   useEffect(() => {
-    document.title = 'SAFI | Valeris Technologies Ltd';
+    document.title = 'SAFI — Financial Behaviour Infrastructure | Valeris Technologies';
     window.scrollTo(0, 0);
+
+    const saved = localStorage.getItem('safi_early_access_joined');
+    if (saved) {
+      setIsSubmitted(true);
+    }
   }, []);
 
-  const faqs = [
-    {
-      q: 'Does deploying SAFI require replacing our existing core banking system?',
-      a: 'Not at all. SAFI is specifically designed to complement existing banking systems, products and channels, not replace them. It acts as an intelligence and control layer that sits alongside your core ledger (e.g. Flexcube, Finacle, Temenos) via secure APIs without altering underlying transaction processing rails.',
-    },
-    {
-      q: 'How does SAFI integrate into our customer-facing mobile banking application?',
-      a: 'We offer two flexible integration paths: (1) Headless REST APIs and Webhooks, allowing your in-house engineering team to build fully bespoke UI within your existing app, or (2) Ready-to-brand mobile SDK components (Flutter, React Native, iOS, Android) that drop directly into your existing codebase.',
-    },
-    {
-      q: 'How does SAFI handle sensitive customer and transaction data?',
-      a: 'SAFI operates under strict bank-grade institutional security. All communications use TLS 1.3, data is encrypted at rest using AES-256, and SAFI never requires access to customer passwords or sensitive card credentials. It operates purely on tokenized transaction telemetry and customer-approved allocation instructions.',
-    },
-    {
-      q: 'Can our institution customize behavioural rules, categorization, and allocation formulas?',
-      a: 'Yes. Financial institutions maintain complete administrative control through the SAFI Institutional Console. Risk parameters, allowable spending buckets, allocation formulas, and nudge copy can be configured to align with your brand voice and compliance policies.',
-    },
-  ];
+  const scrollToEarlyAccess = (e) => {
+    if (e) e.preventDefault();
+    const el = document.getElementById('early-access');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+      const firstInput = el.querySelector('input');
+      if (firstInput) firstInput.focus();
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (submitError) setSubmitError(null);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.fullName.trim() || !formData.email.trim()) {
+      setSubmitError('Please provide your full name and email address.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    const payload = {
+      fullName: formData.fullName.trim(),
+      email: formData.email.trim(),
+      phone: formData.phone.trim(),
+      source: formData.source,
+    };
+
+    // Candidates: primary relative endpoint or direct Apache URL
+    const endpoints = [
+      '/api/early-access.php',
+      'http://localhost/safi/valeristechltd/api/early-access.php',
+    ];
+
+    let lastError = null;
+    let success = false;
+
+    for (const url of endpoints) {
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await res.json().catch(() => null);
+
+        if (res.ok && data?.success) {
+          setIsSubmitted(true);
+          setResponseMsg(data.message || 'Thank you for joining SAFI Early Access!');
+          try {
+            localStorage.setItem(
+              'safi_early_access_joined',
+              JSON.stringify({ ...formData, joinedAt: new Date().toISOString() })
+            );
+          } catch {
+            // Ignore localStorage errors
+          }
+          success = true;
+          break;
+        } else if (data && data.message) {
+          lastError = data.message;
+          break; // Validation or explicit message from server
+        } else {
+          lastError = `Server responded with status ${res.status}`;
+        }
+      } catch (err) {
+        lastError = err.message || 'Network error';
+      }
+    }
+
+    if (!success) {
+      setSubmitError(lastError || 'Unable to submit at this time. Please check your connection.');
+    }
+
+    setIsSubmitting(false);
+  };
 
   return (
-    <div className="safi-page">
-      <PageBanner
-        title="SAFI"
-        subtitle="Financial behaviour, built into banking."
-        breadcrumb="SAFI"
-      />
-
+    <div className="safi-editorial-page">
       {/* =====================================================================
-          NATIVE CODE CAROUSEL SHOWCASE (100% Code recreation of the 5 slides)
+          1. HERO SECTION (Exact pixel match to design)
           ===================================================================== */}
-      <section className="section-padding bg-light" style={{ paddingBottom: '70px' }}>
+      <section className="safi-hero-section">
         <div className="container">
-          <div className="section-header-center" style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 36px' }}>
-            <span className="section-tag">PRODUCT SHOWCASE</span>
-            <h2 className="section-title">The Complete SAFI Narrative</h2>
-            <p className="section-subtext">
-              Step through our interactive presentation on how SAFI integrates financial behaviour into banking.
-            </p>
-          </div>
+          <div className="safi-hero-grid">
+            {/* Left: Typography & Primary Action */}
+            <div className="safi-hero-content">
+              {/* SAFI Brand Wordmark */}
+              <div className="safi-hero-brand">
+                <div className="safi-logo-mark" aria-label="SAFI">
+                  <span className="safi-letter">S</span>
+                  <span className="safi-letter">A</span>
+                  <span className="safi-letter">F</span>
+                  <span className="safi-letter safi-letter-i">
+                    I
+                    <span className="safi-i-accent" />
+                  </span>
+                </div>
+                <div className="safi-submark-tag">
+                  <span>FINANCIAL BEHAVIOUR</span>
+                  <span>INFRASTRUCTURE</span>
+                </div>
+              </div>
 
-          <div className="safi-carousel-wrapper">
-            {/* Top Bar of Active Slide */}
-            <div className="safi-slide-topbar">
-              <SafiBrandMark light={true} size="default" />
-              <span className="safi-slide-counter">
-                0{currentSlide + 1}/05
-              </span>
+              {/* Main Headline in Editorial Serif */}
+              <h1 className="safi-hero-headline">
+                Same money.<br />
+                A more<br />
+                intentional<br />
+                tomorrow.
+              </h1>
+
+              {/* Description Paragraph */}
+              <p className="safi-hero-desc">
+                SAFI is financial behaviour infrastructure that works within your bank,
+                helping you make more intentional decisions with your money, without
+                changing how you bank.
+              </p>
+
+              {/* CTA & Subtext */}
+              <div className="safi-hero-actions">
+                <a
+                  href="#early-access"
+                  onClick={scrollToEarlyAccess}
+                  className="safi-btn-hero"
+                  id="hero-early-access-btn"
+                >
+                  <span>Join Early Access</span>
+                  <span className="safi-arrow-glyph">→</span>
+                </a>
+                <span className="safi-hero-subtext">
+                  Be part of what’s next.
+                </span>
+              </div>
             </div>
 
-            {/* Slide 01: MEET SAFI. */}
-            {currentSlide === 0 && (
-              <div className="safi-slide-content">
-                <div>
-                  <div className="safi-slide-accent-bar" />
-                  <h2 className="safi-slide-headline">
-                    MEET<br />SAFI.
-                  </h2>
-                  <p className="safi-slide-lead" style={{ fontSize: '1.35rem', color: '#f8fafc', fontWeight: 600 }}>
-                    Financial behaviour, built into banking.
-                  </p>
-                  <p className="safi-slide-desc" style={{ maxWidth: '480px' }}>
-                    SAFI is Valeris’ proprietary financial infrastructure product, built to help financial institutions give customers greater control over how they use their money.
-                  </p>
-                  <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-                    <Link to="/contact" className="btn-primary" style={{ padding: '14px 28px' }}>
-                      Request Briefing
-                    </Link>
-                    <button type="button" onClick={nextSlide} className="btn-outline" style={{ borderColor: 'rgba(255,255,255,0.3)', color: '#ffffff', padding: '14px 24px' }}>
-                      Explore Next Slide →
-                    </button>
-                  </div>
-                </div>
+            {/* Right: Editorial Visual, Gold Accent & Floating Note */}
+            <div className="safi-hero-visual">
+              {/* SVG Gold Rings and Emerald Disc Overlay */}
+              <svg className="safi-hero-gold-loops" viewBox="0 0 500 500" fill="none" aria-hidden="true">
+                {/* Dark emerald circular backdrop */}
+                <circle cx="340" cy="140" r="66" fill="#093527" />
 
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  {/* Smartphone Mockup */}
-                  <div className="safi-phone-mock">
-                    <div className="safi-phone-island" />
-                    <div className="safi-phone-screen-bg">
-                      <div className="safi-phone-arc" />
-                      <div style={{ zIndex: 5, textAlign: 'center' }}>
-                        <SafiAppIcon size={84} />
-                        <div style={{ marginTop: '16px', fontSize: '0.85rem', color: '#94a3b8', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700 }}>
-                          SAFI Active
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {/* Upper delicate gold ellipse */}
+                <path
+                  d="M260,180 C240,110 320,60 380,85 C440,110 440,190 370,205 C310,215 270,160 290,130"
+                  stroke="#c59d5f"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                />
+
+                {/* Secondary inner gold ellipse */}
+                <ellipse
+                  cx="335"
+                  cy="142"
+                  rx="68"
+                  ry="48"
+                  stroke="#d4af37"
+                  strokeWidth="1.2"
+                  transform="rotate(-26 335 142)"
+                  opacity="0.8"
+                />
+
+                {/* Lower gold loop swooping down towards sticky note */}
+                <path
+                  d="M375,230 C425,290 455,370 415,430 C385,460 350,445 375,405 C405,355 450,410 475,460"
+                  stroke="#c59d5f"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+
+              {/* Sunlit Desk Photography */}
+              <div className="safi-hero-img-card">
+                <img
+                  src="/images/safi/safi-hero-desk.jpg"
+                  alt="Work desk with open laptop, coffee mug, and houseplant in morning sun"
+                  className="safi-hero-img"
+                  loading="eager"
+                />
               </div>
-            )}
 
-            {/* Slide 02: BANKING IS EVOLVING. */}
-            {currentSlide === 1 && (
-              <div className="safi-slide-content">
-                <div>
-                  <div className="safi-slide-accent-bar" />
-                  <h2 className="safi-slide-headline">
-                    BANKING<br />IS EVOLVING.
-                  </h2>
-                  <p className="safi-slide-lead">
-                    Customers don’t just need access to their money.
-                  </p>
-                  <p className="safi-slide-desc" style={{ color: '#cbd5e1', fontSize: '1.1rem', fontWeight: 600 }}>
-                    They need better ways to use, organise and control it.
-                  </p>
-                </div>
-
-                <div>
-                  <div className="safi-evolve-list">
-                    <div className="safi-evolve-item">
-                      <div className="safi-evolve-icon-box">
-                        <Users size={22} />
-                      </div>
-                      <div>
-                        <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff', margin: 0 }}>
-                          Higher expectations from their bank.
-                        </h4>
-                        <p style={{ fontSize: '0.86rem', color: '#94a3b8', margin: '4px 0 0' }}>
-                          Today's account holders seek guided financial experiences.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="safi-evolve-item">
-                      <div className="safi-evolve-icon-box">
-                        <BarChart3 size={22} />
-                      </div>
-                      <div>
-                        <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff', margin: 0 }}>
-                          More need for financial discipline.
-                        </h4>
-                        <p style={{ fontSize: '0.86rem', color: '#94a3b8', margin: '4px 0 0' }}>
-                          Proactive tools that assist with allocation and prioritization.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="safi-evolve-item">
-                      <div className="safi-evolve-icon-box">
-                        <ShieldCheck size={22} />
-                      </div>
-                      <div>
-                        <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff', margin: 0 }}>
-                          A growing demand for smarter tools.
-                        </h4>
-                        <p style={{ fontSize: '0.86rem', color: '#94a3b8', margin: '4px 0 0' }}>
-                          Real-time responsiveness rather than monthly PDF statements.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              {/* Realistic Torn Paper Sticky Note */}
+              <div className="safi-sticky-note hero-note" aria-hidden="true">
+                <p className="sticky-note-text">
+                  Better<br />
+                  habits.<br />
+                  Brighter<br />
+                  possibilities.<br />
+                  <span className="sticky-heart">♡</span>
+                </p>
               </div>
-            )}
+            </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Slide 03: THIS IS SAFI. */}
-            {currentSlide === 2 && (
-              <div className="safi-slide-content">
-                <div>
-                  <div className="safi-slide-accent-bar" />
-                  <h2 className="safi-slide-headline">
-                    THIS IS<br />SAFI.
-                  </h2>
-                  <p className="safi-slide-lead" style={{ fontSize: '1.25rem' }}>
-                    A Financial Behaviour Engine built for the banking environment.
-                  </p>
-
-                  <div className="safi-triad-banner">
-                    <span>ALLOCATION.</span>
-                    <span className="dot">·</span>
-                    <span>INTELLIGENCE.</span>
-                    <span className="dot">·</span>
-                    <span>CONTROL.</span>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="safi-triad-grid">
-                    <div className="safi-triad-card">
-                      <div style={{ color: '#34d399', marginBottom: '10px' }}><Sliders size={26} /></div>
-                      <h4 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: 800, marginBottom: '6px' }}>Allocation</h4>
-                      <p style={{ color: '#94a3b8', fontSize: '0.82rem', lineHeight: 1.5, margin: 0 }}>
-                        Rule-based pockets &amp; automated split-on-deposit ratios.
-                      </p>
-                    </div>
-
-                    <div className="safi-triad-card">
-                      <div style={{ color: '#34d399', marginBottom: '10px' }}><Cpu size={26} /></div>
-                      <h4 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: 800, marginBottom: '6px' }}>Intelligence</h4>
-                      <p style={{ color: '#94a3b8', fontSize: '0.82rem', lineHeight: 1.5, margin: 0 }}>
-                        Velocity patterns, predictive cashflow &amp; smart prompts.
-                      </p>
-                    </div>
-
-                    <div className="safi-triad-card">
-                      <div style={{ color: '#34d399', marginBottom: '10px' }}><ShieldCheck size={26} /></div>
-                      <h4 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: 800, marginBottom: '6px' }}>Control</h4>
-                      <p style={{ color: '#94a3b8', fontSize: '0.82rem', lineHeight: 1.5, margin: 0 }}>
-                        Discretionary spending guardrails &amp; goal protection.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+      {/* =====================================================================
+          2. THREE-PILLAR FEATURE STRIP
+          ===================================================================== */}
+      <section className="safi-pillars-section">
+        <div className="container">
+          <div className="safi-pillars-grid">
+            {/* Pillar 1: More Control */}
+            <div className="safi-pillar-item">
+              <div className="safi-pillar-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#06241b" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                  <circle cx="15" cy="6" r="2.5" fill="#faf8f4" stroke="#06241b" strokeWidth="2" />
+                  <circle cx="8" cy="12" r="2.5" fill="#faf8f4" stroke="#06241b" strokeWidth="2" />
+                  <circle cx="16" cy="18" r="2.5" fill="#faf8f4" stroke="#06241b" strokeWidth="2" />
+                </svg>
               </div>
-            )}
+              <span className="safi-pillar-label">MORE CONTROL</span>
+            </div>
 
-            {/* Slide 04: BUILT FOR BANKS. */}
-            {currentSlide === 3 && (
-              <div className="safi-slide-content">
-                <div>
-                  <div className="safi-slide-accent-bar" />
-                  <h2 className="safi-slide-headline">
-                    BUILT<br />FOR BANKS.
-                  </h2>
-                  <p className="safi-slide-lead" style={{ fontSize: '1.25rem', color: '#34d399', fontWeight: 700 }}>
-                    Designed around the customer.
-                  </p>
-                  <p className="safi-slide-desc" style={{ fontSize: '1.05rem', color: '#cbd5e1', maxWidth: '480px' }}>
-                    A capability that can sit within existing banking experiences and create more structured financial behaviour.
-                  </p>
-                </div>
-
-                <div>
-                  {/* Flow Diagram from Slide 4 */}
-                  <div className="safi-arch-flow">
-                    <div className="safi-arch-step">
-                      <div className="safi-arch-icon-wrap">
-                        <Landmark size={24} color="#34d399" />
-                      </div>
-                      <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#ffffff' }}>
-                        Banking<br />Experience
-                      </span>
-                    </div>
-
-                    <div className="safi-arch-arrow">→</div>
-
-                    <div className="safi-arch-step">
-                      <SafiAppIcon size={52} />
-                      <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#34d399' }}>
-                        SAFI<br />by Valeris
-                      </span>
-                    </div>
-
-                    <div className="safi-arch-arrow">→</div>
-
-                    <div className="safi-arch-step">
-                      <div className="safi-arch-icon-wrap">
-                        <UserCheck size={24} color="#34d399" />
-                      </div>
-                      <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#ffffff' }}>
-                        Customer<br />Experience
-                      </span>
-                    </div>
-                  </div>
-                </div>
+            {/* Pillar 2: Better Decisions */}
+            <div className="safi-pillar-item">
+              <div className="safi-pillar-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="#06241b">
+                  <rect x="5" y="13" width="3.4" height="8" rx="1.7" />
+                  <rect x="10.3" y="8" width="3.4" height="13" rx="1.7" />
+                  <rect x="15.6" y="3" width="3.4" height="18" rx="1.7" />
+                </svg>
               </div>
-            )}
+              <span className="safi-pillar-label">BETTER DECISIONS</span>
+            </div>
 
-            {/* Slide 05: A DIFFERENT WAY TO EXPERIENCE YOUR MONEY. */}
-            {currentSlide === 4 && (
-              <div className="safi-slide-content">
-                <div>
-                  <div className="safi-slide-accent-bar" />
-                  <h2 className="safi-slide-headline">
-                    A DIFFERENT WAY<br />TO EXPERIENCE<br /><span className="accent">YOUR MONEY.</span>
-                  </h2>
-                  <p className="safi-slide-lead" style={{ fontSize: '1.2rem', color: '#ffffff', fontWeight: 700 }}>
-                    Not just a balance.
-                  </p>
-                  <p className="safi-slide-desc" style={{ fontSize: '1.05rem', color: '#cbd5e1' }}>
-                    A more structured relationship with it.
-                  </p>
-                </div>
-
-                <div>
-                  <div className="safi-compare-container">
-                    <div className="safi-compare-box">
-                      <span style={{ fontSize: '0.78rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700, display: 'block', marginBottom: '8px' }}>
-                        Traditional Banking
-                      </span>
-                      <h4 style={{ color: '#ffffff', fontSize: '1.05rem', fontWeight: 700, marginBottom: '8px' }}>
-                        Single Static Number
-                      </h4>
-                      <p style={{ color: '#94a3b8', fontSize: '0.85rem', lineHeight: 1.5, margin: 0 }}>
-                        Passive balance tracking and retrospective statements without behavioral guidance.
-                      </p>
-                    </div>
-
-                    <div className="safi-compare-box active">
-                      <span style={{ fontSize: '0.78rem', color: '#34d399', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700, display: 'block', marginBottom: '8px' }}>
-                        With SAFI Embedded
-                      </span>
-                      <h4 style={{ color: '#ffffff', fontSize: '1.05rem', fontWeight: 700, marginBottom: '8px' }}>
-                        Structured Relationship
-                      </h4>
-                      <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.5, margin: 0 }}>
-                        Configured allocations, proactive behavioural nudges, and deep financial clarity.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+            {/* Pillar 3: A More Intentional Tomorrow */}
+            <div className="safi-pillar-item">
+              <div className="safi-pillar-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#06241b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 21V11" />
+                  <path d="M12 11C12 6.5 8 5 4 6C3.5 10 6.5 13 12 13" />
+                  <path d="M12 9C12 4.5 16 3 20 4C20.5 8 17.5 11 12 11" />
+                </svg>
               </div>
-            )}
+              <span className="safi-pillar-label">A MORE INTENTIONAL TOMORROW</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Bottom Controls Bar */}
-            <div className="safi-slide-bottombar">
-              {/* Carousel Dots */}
-              <div className="safi-dots-wrap">
-                {Array.from({ length: totalSlides }).map((_, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setCurrentSlide(idx)}
-                    className={`safi-dot ${currentSlide === idx ? 'active' : ''}`}
-                    aria-label={`Go to slide ${idx + 1}`}
+      {/* =====================================================================
+          3. FULL-WIDTH SPLIT CARD (EARLY ACCESS BANNER)
+          ===================================================================== */}
+      <section className="safi-split-card-section">
+        <div className="container">
+          <div className="safi-split-container">
+            {/* Left Column: Portrait Photography with Handwritten Overlay */}
+            <div className="safi-split-photo">
+              <img
+                src="/images/safi/safi-woman-mug.jpg"
+                alt="Young woman holding coffee cup looking thoughtfully with calm confidence"
+                className="safi-split-img"
+                loading="lazy"
+              />
+
+              {/* Overlaid Gold Loops & Handwritten Text */}
+              <div className="safi-split-handwritten-overlay">
+                <svg className="safi-gold-loop-svg" viewBox="0 0 100 100" fill="none">
+                  <ellipse
+                    cx="52"
+                    cy="48"
+                    rx="42"
+                    ry="28"
+                    stroke="#d4af37"
+                    strokeWidth="1.4"
+                    transform="rotate(-25 52 48)"
+                    opacity="0.85"
                   />
-                ))}
+                </svg>
+                <p className="handwritten-banner-text">
+                  Same<br />
+                  money.<br />
+                  A more<br />
+                  intentional<br />
+                  tomorrow.
+                </p>
+              </div>
+            </div>
+
+            {/* Right Column: Dark Emerald Early Access Invitation */}
+            <div className="safi-split-content">
+              <span className="safi-badge-early">EARLY ACCESS</span>
+              <h2 className="safi-split-title">
+                Be part of what’s next.
+              </h2>
+              <p className="safi-split-desc">
+                We’re opening early access to SAFI. Join to get updates, participate
+                in upcoming opportunities and be among the first to experience a new
+                approach to managing your money, built around your goals and real life.
+              </p>
+              <a
+                href="#early-access"
+                onClick={scrollToEarlyAccess}
+                className="safi-btn-white"
+                id="banner-early-access-btn"
+              >
+                <span>Join Early Access</span>
+                <span className="safi-arrow-glyph">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          4. "WHAT IS SAFI?" SECTION
+          ===================================================================== */}
+      <section className="safi-whatis-section">
+        <div className="container">
+          <div className="safi-whatis-grid">
+            {/* Left: What is SAFI Copy & interactive clarification */}
+            <div className="safi-whatis-text">
+              <h2 className="safi-editorial-heading">What is SAFI?</h2>
+              <div className="safi-accent-bar" />
+
+              <p className="safi-whatis-desc">
+                SAFI is a behavioural banking infrastructure that sits within the
+                banking experience. It combines intelligence and allocation rules to help
+                you manage your money around your goals, habits and everyday life.
+              </p>
+
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setShowBudgetingModal(!showBudgetingModal)}
+                  className="safi-link-arrow"
+                  aria-expanded={showBudgetingModal}
+                >
+                  <span>Not a budgeting app.</span>
+                  <span className="safi-arrow-glyph">→</span>
+                </button>
+
+                {showBudgetingModal && (
+                  <div className="safi-budgeting-explainer">
+                    <p style={{ margin: 0, fontSize: '0.94rem', color: '#2b453a', lineHeight: 1.65 }}>
+                      <strong>Why SAFI is different:</strong> Traditional budgeting apps require manual
+                      receipt uploads, retroactive categorization, and guilt-driven review. SAFI operates
+                      proactively <em>inside</em> the banking rails, guiding daily allocations and enforcing
+                      purposeful discipline before money is spent.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Right: Phone on Desk Photo with Handwritten Sticky Note */}
+            <div className="safi-whatis-visual">
+              <div className="safi-whatis-img-card">
+                <img
+                  src="/images/safi/safi-phone-desk.jpg"
+                  alt="Phone on wooden desk next to notebook and cup in morning light"
+                  className="safi-whatis-img"
+                  loading="lazy"
+                />
               </div>
 
-              {/* Prev / Next Buttons */}
-              <div className="safi-carousel-nav-btns">
-                <button
-                  type="button"
-                  onClick={prevSlide}
-                  className="safi-nav-btn"
-                  aria-label="Previous slide"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <button
-                  type="button"
-                  onClick={nextSlide}
-                  className="safi-nav-btn"
-                  aria-label="Next slide"
-                >
-                  <ChevronRight size={20} />
-                </button>
+              {/* Sticky Paper Note */}
+              <div className="safi-sticky-note whatis-note" aria-hidden="true">
+                <p className="sticky-note-text">
+                  Guidance<br />
+                  today.<br />
+                  More for<br />
+                  tomorrow.
+                </p>
               </div>
             </div>
           </div>
@@ -505,259 +410,285 @@ export default function SafiPage() {
       </section>
 
       {/* =====================================================================
-          DETAILED ARCHITECTURAL PILLARS (Allocation · Intelligence · Control)
+          5. "HOW SAFI WORKS" SECTION
           ===================================================================== */}
-      <section className="section-padding" style={{ backgroundColor: '#ffffff' }}>
+      <section className="safi-how-section">
         <div className="container">
-          <div className="section-header-center" style={{ maxWidth: '800px', margin: '0 auto 54px', textAlign: 'center' }}>
-            <span className="section-tag">CORE ENGINE CAPABILITIES</span>
-            <h2 className="section-title">The Three Pillars of the SAFI Engine</h2>
-            <p className="section-subtext">
-              SAFI works within existing banking environments to provide configurable allocation and spending controls, behavioural intelligence and greater visibility into financial activity.
-            </p>
-          </div>
+          <h2 className="safi-editorial-heading">How SAFI works</h2>
+          <div className="safi-accent-bar" />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
-            {/* Pillar 1: Allocation */}
-            <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '24px', padding: '36px 30px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'linear-gradient(135deg, #059669 0%, #047857 100%)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Sliders size={26} />
-                  </div>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.1em' }}>PILLAR 01</span>
-                </div>
-                <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--dark-heading)', marginBottom: '8px' }}>
-                  Configurable Allocation
-                </h3>
-                <p style={{ fontSize: '0.94rem', fontWeight: 700, color: '#1e293b', marginBottom: '12px' }}>
-                  Giving bank customers proactive sovereignty over how money is used.
-                </p>
-                <p style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: 1.6, marginBottom: '20px' }}>
-                  Configurable allocation and spending controls allow users to define rule-based sub-wallets, percentage distributions upon salary receipt, and category constraints.
-                </p>
+          <div className="safi-how-grid">
+            {/* Step 1 */}
+            <div className="safi-how-card">
+              <div className="safi-how-icon-circle" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#06241b" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                  <circle cx="15" cy="6" r="2.5" fill="#ede7dc" stroke="#06241b" strokeWidth="2" />
+                  <circle cx="8" cy="12" r="2.5" fill="#ede7dc" stroke="#06241b" strokeWidth="2" />
+                  <circle cx="16" cy="18" r="2.5" fill="#ede7dc" stroke="#06241b" strokeWidth="2" />
+                </svg>
               </div>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid #f1f5f9', paddingTop: '16px' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#334155' }}>
-                  <CheckCircle2 size={15} color="var(--primary)" />
-                  <span>Automated deposit distribution rules</span>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#334155' }}>
-                  <CheckCircle2 size={15} color="var(--primary)" />
-                  <span>Category-specific spending ceilings</span>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#334155' }}>
-                  <CheckCircle2 size={15} color="var(--primary)" />
-                  <span>Goal-directed sub-ledger partitioning</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Pillar 2: Intelligence */}
-            <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '24px', padding: '36px 30px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'linear-gradient(135deg, #059669 0%, #047857 100%)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Cpu size={26} />
-                  </div>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.1em' }}>PILLAR 02</span>
-                </div>
-                <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--dark-heading)', marginBottom: '8px' }}>
-                  Behavioural Intelligence
-                </h3>
-                <p style={{ fontSize: '0.94rem', fontWeight: 700, color: '#1e293b', marginBottom: '12px' }}>
-                  Moving beyond static ledgers to responsive, contextual guidance.
-                </p>
-                <p style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: 1.6, marginBottom: '20px' }}>
-                  Dynamic behavioural algorithms interpret inflow and outflow momentum, identifying upcoming recurring liabilities, spending velocity changes, and liquidity signals.
-                </p>
-              </div>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid #f1f5f9', paddingTop: '16px' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#334155' }}>
-                  <CheckCircle2 size={15} color="var(--primary)" />
-                  <span>Velocity tracking &amp; anomaly detection</span>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#334155' }}>
-                  <CheckCircle2 size={15} color="var(--primary)" />
-                  <span>Proactive contextual nudges &amp; alerts</span>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#334155' }}>
-                  <CheckCircle2 size={15} color="var(--primary)" />
-                  <span>Actionable decision support in host apps</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Pillar 3: Control */}
-            <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '24px', padding: '36px 30px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'linear-gradient(135deg, #059669 0%, #047857 100%)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <ShieldCheck size={26} />
-                  </div>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.1em' }}>PILLAR 03</span>
-                </div>
-                <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--dark-heading)', marginBottom: '8px' }}>
-                  Granular Control
-                </h3>
-                <p style={{ fontSize: '0.94rem', fontWeight: 700, color: '#1e293b', marginBottom: '12px' }}>
-                  Bringing clarity and discipline to everyday financial decisions.
-                </p>
-                <p style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: 1.6, marginBottom: '20px' }}>
-                  Enriched transaction metadata eliminates cryptic statement descriptions, identifies recurring subscriptions, and enforces customizable guardrails to protect capital.
-                </p>
-              </div>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid #f1f5f9', paddingTop: '16px' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#334155' }}>
-                  <CheckCircle2 size={15} color="var(--primary)" />
-                  <span>Enriched brand &amp; merchant metadata</span>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#334155' }}>
-                  <CheckCircle2 size={15} color="var(--primary)" />
-                  <span>Recurring subscription audit telemetry</span>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#334155' }}>
-                  <CheckCircle2 size={15} color="var(--primary)" />
-                  <span>User-managed discretionary locks</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          BUILT BY VALERIS MANIFESTO STRIP
-          ===================================================================== */}
-      <section className="section-padding bg-light">
-        <div className="container">
-          <div style={{
-            background: 'linear-gradient(135deg, #041c14 0%, #064e3b 100%)',
-            borderRadius: '26px',
-            padding: '48px 40px',
-            color: '#ffffff',
-            boxShadow: '0 20px 45px rgba(4, 28, 20, 0.2)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '30px'
-          }}>
-            <div style={{ maxWidth: '780px' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#34d399', fontSize: '0.82rem', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '12px' }}>
-                <Sparkles size={14} />
-                <span>BUILT BY VALERIS</span>
-              </div>
-              <h3 style={{ fontSize: 'clamp(1.6rem, 2.8vw, 2.2rem)', fontWeight: 800, color: '#ffffff', marginBottom: '16px', lineHeight: 1.3 }}>
-                SAFI is our first expression of what we believe financial technology can become.
+              <h3 className="safi-how-title">
+                Understands your spending behaviour
               </h3>
-              <p style={{ fontSize: '1.05rem', color: '#cbd5e1', lineHeight: 1.7, margin: 0 }}>
-                Financial institutions already have the accounts, channels, transaction infrastructure and customer relationships. We build the intelligence and control layers that can make those systems do more.
+              <p className="safi-how-desc">
+                Analyses transactions to identify patterns and priorities.
               </p>
             </div>
-            <div>
-              <Link to="/contact" className="btn-primary" style={{ background: '#10b981', color: '#041c14', fontWeight: 800, padding: '16px 32px' }}>
-                Schedule Consultation
-              </Link>
+
+            {/* Step 2 */}
+            <div className="safi-how-card">
+              <div className="safi-how-icon-circle" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#06241b" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="4" y="3" width="16" height="18" rx="2" />
+                  <line x1="8" y1="8" x2="16" y2="8" />
+                  <line x1="8" y1="12" x2="16" y2="12" />
+                  <line x1="8" y1="16" x2="13" y2="16" />
+                </svg>
+              </div>
+              <h3 className="safi-how-title">
+                Provides guidance
+              </h3>
+              <p className="safi-how-desc">
+                Helps you make better day-to-day decisions based on your goals.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="safi-how-card">
+              <div className="safi-how-icon-circle" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#06241b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+              </div>
+              <h3 className="safi-how-title">
+                Keeps your goals in view
+              </h3>
+              <p className="safi-how-desc">
+                Gives you more control, keeping your bigger goals in sight.
+              </p>
+            </div>
+
+            {/* Step 4 */}
+            <div className="safi-how-card">
+              <div className="safi-how-icon-circle" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#06241b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 21V11" />
+                  <path d="M12 11C12 6.5 8 5 4 6C3.5 10 6.5 13 12 13" />
+                  <path d="M12 9C12 4.5 16 3 20 4C20.5 8 17.5 11 12 11" />
+                </svg>
+              </div>
+              <h3 className="safi-how-title">
+                Works within your bank
+              </h3>
+              <p className="safi-how-desc">
+                Built to integrate with your existing banking experience.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-
-
       {/* =====================================================================
-          PRODUCT FAQ
+          6. "JOIN SAFI EARLY ACCESS" FORM CARD
           ===================================================================== */}
-      <section className="section-padding bg-light">
-        <div className="container" style={{ maxWidth: '820px' }}>
-          <div className="section-header-center" style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <span className="section-tag">FREQUENTLY ASKED QUESTIONS</span>
-            <h2 className="section-title">Institutional Deployment Details</h2>
-          </div>
+      <section className="safi-form-section" id="early-access">
+        <div className="container">
+          <div className="safi-form-card">
+            <h2 className="safi-form-title">Join SAFI Early Access</h2>
+            <div className="safi-accent-bar" />
+            <p className="safi-form-desc">
+              Fill in your details to receive updates and be part of our early access community.
+            </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {faqs.map((faq, idx) => {
-              const isOpen = openFaq === idx;
-              return (
-                <div
-                  key={idx}
-                  style={{
-                    background: '#ffffff',
-                    border: '1.5px solid #e2e8f0',
-                    borderRadius: '16px',
-                    overflow: 'hidden',
-                    transition: 'var(--transition)'
+            {isSubmitted ? (
+              <div className="safi-success-alert">
+                <CheckCircle2 size={44} color="#059669" style={{ margin: '0 auto 14px' }} />
+                <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#06241b', marginBottom: '8px' }}>
+                  You’re on the early access list!
+                </h3>
+                <p style={{ fontSize: '0.94rem', color: '#2b453a', lineHeight: 1.6, margin: '0 auto 20px', maxWidth: '440px' }}>
+                  {responseMsg || "Thank you for joining. We’ve reserved your spot and will share updates as rollouts begin."}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsSubmitted(false);
+                    setFormData({ fullName: '', email: '', phone: '', source: '' });
+                    setResponseMsg('');
+                    try {
+                      localStorage.removeItem('safi_early_access_joined');
+                    } catch {}
                   }}
+                  className="btn-outline"
+                  style={{ fontSize: '0.85rem', padding: '8px 20px', borderColor: '#06241b', color: '#06241b' }}
                 >
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaq(isOpen ? -1 : idx)}
-                    style={{
-                      width: '100%',
-                      padding: '20px 24px',
-                      background: 'none',
-                      border: 'none',
-                      textAlign: 'left',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      cursor: 'pointer',
-                      gap: '16px'
-                    }}
-                  >
-                    <span style={{ fontSize: '1.02rem', fontWeight: 700, color: 'var(--dark-heading)' }}>
-                      {faq.q}
-                    </span>
-                    <div style={{
-                      transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                      transition: 'transform 0.25s ease',
-                      color: 'var(--primary)',
-                      flexShrink: 0
-                    }}>
-                      <ChevronDown size={20} />
-                    </div>
-                  </button>
-                  {isOpen && (
-                    <div style={{ padding: '0 24px 22px', borderTop: '1px solid #f1f5f9' }}>
-                      <p style={{ fontSize: '0.94rem', color: '#475569', lineHeight: 1.65, margin: '14px 0 0' }}>
-                        {faq.a}
-                      </p>
-                    </div>
-                  )}
+                  Submit another contact
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="safi-form">
+                {submitError && (
+                  <div style={{
+                    backgroundColor: '#fef2f2',
+                    border: '1px solid #fecaca',
+                    color: '#991b1b',
+                    padding: '12px 16px',
+                    borderRadius: '10px',
+                    fontSize: '0.88rem',
+                    marginBottom: '18px',
+                    textAlign: 'left'
+                  }}>
+                    {submitError}
+                  </div>
+                )}
+                <div className="safi-form-group">
+                  <input
+                    type="text"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleInputChange}
+                    placeholder="Full Name"
+                    required
+                    className="safi-input"
+                    autoComplete="name"
+                  />
                 </div>
-              );
-            })}
+
+                <div className="safi-form-group">
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Email Address"
+                    required
+                    className="safi-input"
+                    autoComplete="email"
+                  />
+                </div>
+
+                <div className="safi-form-group">
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="Phone Number (Optional)"
+                    className="safi-input"
+                    autoComplete="tel"
+                  />
+                </div>
+
+                <div className="safi-form-group">
+                  <div className="safi-select-wrap">
+                    <select
+                      name="source"
+                      value={formData.source}
+                      onChange={handleInputChange}
+                      className="safi-select"
+                    >
+                      <option value="">How did you hear about SAFI?</option>
+                      <option value="Social Media">Social Media</option>
+                      <option value="Friend / Colleague">Friend or Colleague</option>
+                      <option value="Bank Partner">Bank Partner / Financial Institution</option>
+                      <option value="News / Article">News, Article or Tech Publication</option>
+                      <option value="Search Engine">Search Engine</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <ChevronDown size={18} className="safi-select-chevron" />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="safi-submit-btn"
+                  id="submit-early-access-btn"
+                >
+                  {isSubmitting ? (
+                    <span>Registering...</span>
+                  ) : (
+                    <>
+                      <span>Join Early Access</span>
+                      <span className="safi-arrow-glyph">→</span>
+                    </>
+                  )}
+                </button>
+
+                <p className="safi-form-disclaimer">
+                  We’ll only use your information to share updates about SAFI and related opportunities.
+                </p>
+              </form>
+            )}
           </div>
         </div>
       </section>
 
       {/* =====================================================================
-          BOTTOM CONVERSION CTA
+          7. INSTITUTIONAL & ENTERPRISE SPECIFICATIONS (Clean Collapsible)
           ===================================================================== */}
-      <section className="section-padding" style={{ backgroundColor: '#041c14', color: '#ffffff', textAlign: 'center' }}>
-        <div className="container" style={{ maxWidth: '780px' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.18em', color: '#34d399', textTransform: 'uppercase', display: 'block', marginBottom: '14px' }}>
-            PARTNER WITH VALERIS
-          </span>
-          <h2 className="section-title text-white" style={{ fontSize: 'clamp(2rem, 3.8vw, 3.2rem)', marginBottom: '18px', color: '#ffffff' }}>
-            LET’S BUILD SOMETHING USEFUL.
-          </h2>
-          <p className="section-subtext" style={{ color: '#cbd5e1', fontSize: '1.08rem', lineHeight: 1.65, margin: '0 auto 36px' }}>
-            Ready to bring configurable allocation and behavioural intelligence to your banking customers? Schedule a technical briefing with our systems engineers.
-          </p>
-          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link to="/contact" className="btn-primary" style={{ background: '#10b981', color: '#041c14', fontWeight: 800, padding: '16px 36px', fontSize: '1rem' }}>
-              <span>Request SAFI Briefing →</span>
-            </Link>
-            <a
-              href="mailto:Thevalerisgroup@gmail.com?subject=SAFI%20Institutional%20Inquiry"
-              className="btn-outline"
-              style={{ borderColor: 'rgba(255, 255, 255, 0.4)', color: '#ffffff', padding: '16px 32px', fontSize: '1rem' }}
-            >
-              Email Advisory Team
-            </a>
-          </div>
+      <section style={{ backgroundColor: '#faf8f4', borderTop: '1px solid rgba(6,36,27,0.08)', padding: '36px 0 60px' }}>
+        <div className="container" style={{ maxWidth: '820px', textAlign: 'center' }}>
+          <button
+            type="button"
+            onClick={() => setShowTechAccordion(!showTechAccordion)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              background: '#ffffff',
+              border: '1.5px solid rgba(6,36,27,0.12)',
+              borderRadius: '9999px',
+              padding: '12px 28px',
+              color: '#06241b',
+              fontWeight: 700,
+              fontSize: '0.92rem',
+              cursor: 'pointer',
+              transition: 'var(--transition)'
+            }}
+          >
+            <Building2 size={16} color="#059669" />
+            <span>Are you a Financial Institution? View Architecture Briefing</span>
+            {showTechAccordion ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+
+          {showTechAccordion && (
+            <div style={{ marginTop: '28px', textAlign: 'left', background: '#ffffff', border: '1px solid #e2ddd4', borderRadius: '20px', padding: '36px', boxShadow: '0 12px 35px rgba(6,36,27,0.06)' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#059669', fontSize: '0.78rem', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                <Sparkles size={14} />
+                <span>INSTITUTIONAL INTEGRATION</span>
+              </div>
+              <h3 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#06241b', marginBottom: '14px' }}>
+                How SAFI Integrates with Core Banking Ledger Systems
+              </h3>
+              <p style={{ fontSize: '0.95rem', color: '#4b6358', lineHeight: 1.65, marginBottom: '22px' }}>
+                SAFI acts as an intelligence and behavioural allocation layer alongside your existing core ledger (e.g. Flexcube, Finacle, Temenos) via secure APIs without altering underlying transaction processing rails.
+              </p>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+                <div style={{ background: '#faf8f4', padding: '16px', borderRadius: '12px', border: '1px solid #ede7dc' }}>
+                  <Shield size={18} color="#059669" style={{ marginBottom: '8px' }} />
+                  <h4 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#06241b', margin: '0 0 4px' }}>Bank-Grade Security</h4>
+                  <p style={{ fontSize: '0.84rem', color: '#556b61', margin: 0 }}>Operates on tokenized telemetry with TLS 1.3 and AES-256 encryption.</p>
+                </div>
+
+                <div style={{ background: '#faf8f4', padding: '16px', borderRadius: '12px', border: '1px solid #ede7dc' }}>
+                  <Layers size={18} color="#059669" style={{ marginBottom: '8px' }} />
+                  <h4 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#06241b', margin: '0 0 4px' }}>Headless APIs &amp; SDKs</h4>
+                  <p style={{ fontSize: '0.84rem', color: '#556b61', margin: 0 }}>Native drop-in mobile SDKs or REST APIs for custom front-end embedding.</p>
+                </div>
+
+                <div style={{ background: '#faf8f4', padding: '16px', borderRadius: '12px', border: '1px solid #ede7dc' }}>
+                  <Lock size={18} color="#059669" style={{ marginBottom: '8px' }} />
+                  <h4 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#06241b', margin: '0 0 4px' }}>Policy Governance</h4>
+                  <p style={{ fontSize: '0.84rem', color: '#556b61', margin: 0 }}>Bank administrators configure behavioural parameters, compliance buckets, and copy.</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </div>

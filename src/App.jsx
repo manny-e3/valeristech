@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './App.css';
 
 import TopBar from './components/TopBar';
@@ -29,8 +29,7 @@ function MainSiteLayout({ children }) {
       {/* Route Scroll-to-Top Handler */}
       <ScrollToTopOnPageChange />
 
-      {/* Global Header */}
-      <TopBar />
+      {/* Global Luxury Header */}
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenOffcanvas={() => setIsOffcanvasOpen(true)}

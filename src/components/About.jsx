@@ -89,7 +89,7 @@ export default function About() {
         <div style={{ marginTop: '54px' }}>
           <div style={{ marginBottom: '28px' }}>
             <span className="section-tag">WHY VALERIS</span>
-            <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--dark-heading)', letterSpacing: '-0.02em' }}>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', fontWeight: 400, color: 'var(--dark-heading)', letterSpacing: '-0.02em' }}>
               Built Around How Business Actually Operates
             </h3>
           </div>
@@ -138,10 +138,10 @@ export default function About() {
         </div>
 
         {/* WHERE WE WORK Section */}
-        <div style={{ marginTop: '64px', paddingTop: '48px', borderTop: '1px solid #e2e8f0' }}>
+        <div style={{ marginTop: '64px', paddingTop: '48px', borderTop: '1px solid #ede7dc' }}>
           <div style={{ textAlign: 'center', marginBottom: '36px' }}>
             <span className="section-tag">WHERE WE WORK</span>
-            <h3 style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--dark-heading)' }}>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', fontWeight: 400, color: 'var(--dark-heading)' }}>
               Sectors &amp; Operating Environments
             </h3>
           </div>
@@ -152,18 +152,18 @@ export default function About() {
                 key={sec.id}
                 style={{
                   background: '#ffffff',
-                  border: '1.5px solid #e2e8f0',
-                  borderRadius: '18px',
-                  padding: '30px 26px',
-                  boxShadow: '0 4px 16px rgba(0,0,0,0.03)',
+                  border: '1.5px solid #ede7dc',
+                  borderRadius: '22px',
+                  padding: '34px 28px',
+                  boxShadow: '0 4px 18px rgba(6,36,27,0.03)',
                   transition: 'var(--transition)'
                 }}
               >
-                <div style={{ display: 'inline-block', width: '36px', height: '4px', background: 'var(--primary)', borderRadius: '2px', marginBottom: '14px' }} />
-                <h4 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--dark-heading)', marginBottom: '10px' }}>
+                <div style={{ display: 'inline-block', width: '36px', height: '3px', background: '#c29853', borderRadius: '2px', marginBottom: '16px' }} />
+                <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.35rem', fontWeight: 400, color: 'var(--dark-heading)', marginBottom: '10px' }}>
                   {sec.title}
                 </h4>
-                <p style={{ fontSize: '0.92rem', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
+                <p style={{ fontSize: '0.94rem', color: '#597367', lineHeight: 1.62, margin: 0 }}>
                   {sec.desc}
                 </p>
               </div>

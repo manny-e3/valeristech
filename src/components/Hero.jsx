@@ -4,6 +4,25 @@ import { Link } from 'react-router-dom';
 
 const slides = [
   {
+    id: 'safi',
+    badge: 'FLAGSHIP PRODUCT · BEHAVIOURAL BANKING',
+    mobileBadge: 'SAFI · BEHAVIOURAL BANKING',
+    title: 'Same money. A more intentional tomorrow.',
+    lead: 'SAFI is financial behaviour infrastructure that works within your bank, helping you make more intentional decisions with your money, without changing how you bank.',
+    primaryBtn: {
+      text: 'Explore SAFI',
+      to: '/safi',
+      isInternal: true,
+    },
+    secondaryBtn: {
+      text: 'Join Early Access',
+      to: '/safi#early-access',
+      isInternal: true,
+    },
+    bgImage: '/images/safi/safi-hero-desk.jpg',
+    bgPosition: 'center',
+  },
+  {
     id: 'valeris',
     badge: 'FINANCIAL TECHNOLOGY · DIGITAL SYSTEMS · ADVISORY',
     mobileBadge: 'FINTECH · DIGITAL SYSTEMS',
@@ -20,25 +39,6 @@ const slides = [
       isInternal: true,
     },
     bgImage: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1920&q=85',
-    bgPosition: 'center right',
-  },
-  {
-    id: 'safi',
-    badge: 'FLAGSHIP PRODUCT · BEHAVIOURAL BANKING',
-    mobileBadge: 'SAFI · BEHAVIOURAL BANKING',
-    title: 'SAFI — Financial behaviour, built into banking.',
-    lead: 'Our proprietary engine empowers banks and institutions to give customers structured control over spending, saving, and money.',
-    primaryBtn: {
-      text: 'Explore SAFI',
-      to: '/safi',
-      isInternal: true,
-    },
-    secondaryBtn: {
-      text: 'Talk to us',
-      to: '/contact',
-      isInternal: true,
-    },
-    bgImage: '/images/safi/safi-slide-1.jpg',
     bgPosition: 'center right',
   },
 ];

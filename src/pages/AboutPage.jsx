@@ -146,27 +146,27 @@ export default function AboutPage() {
                 key={item.num}
                 style={{
                   background: '#ffffff',
-                  border: '1.5px solid #e2e8f0',
+                  border: '1.5px solid #ede7dc',
                   borderRadius: '24px',
                   padding: '36px 30px',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+                  boxShadow: '0 4px 20px rgba(6,36,27,0.03)',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '16px',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ color: 'var(--primary)', background: '#ecfdf5', padding: '12px', borderRadius: '14px' }}>
+                  <div style={{ color: '#06241b', background: '#fbf9f5', border: '1.5px solid #ede7dc', width: '52px', height: '52px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {item.icon}
                   </div>
-                  <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.1em' }}>
+                  <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#c29853', fontFamily: 'var(--font-serif)' }}>
                     {item.num}
                   </span>
                 </div>
-                <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--dark-heading)', margin: 0 }}>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontWeight: 400, color: 'var(--dark-heading)', margin: 0 }}>
                   {item.title}
                 </h3>
-                <p style={{ fontSize: '0.95rem', color: '#64748b', lineHeight: 1.65, margin: 0 }}>
+                <p style={{ fontSize: '0.95rem', color: '#597367', lineHeight: 1.65, margin: 0 }}>
                   {item.desc}
                 </p>
               </div>
@@ -192,17 +192,17 @@ export default function AboutPage() {
                 key={sec.id}
                 style={{
                   background: '#ffffff',
-                  border: '1.5px solid #e2e8f0',
-                  borderRadius: '20px',
-                  padding: '32px 28px',
-                  boxShadow: '0 4px 16px rgba(0,0,0,0.03)',
+                  border: '1.5px solid #ede7dc',
+                  borderRadius: '22px',
+                  padding: '34px 28px',
+                  boxShadow: '0 4px 18px rgba(6,36,27,0.03)',
                 }}
               >
-                <div style={{ width: '40px', height: '4px', background: 'var(--primary)', borderRadius: '2px', marginBottom: '16px' }} />
-                <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--dark-heading)', marginBottom: '12px' }}>
+                <div style={{ width: '36px', height: '3px', background: '#c29853', borderRadius: '2px', marginBottom: '16px' }} />
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.35rem', fontWeight: 400, color: 'var(--dark-heading)', marginBottom: '12px' }}>
                   {sec.title}
                 </h3>
-                <p style={{ fontSize: '0.93rem', color: '#64748b', lineHeight: 1.65, margin: 0 }}>
+                <p style={{ fontSize: '0.94rem', color: '#597367', lineHeight: 1.65, margin: 0 }}>
                   {sec.desc}
                 </p>
               </div>
@@ -215,21 +215,22 @@ export default function AboutPage() {
       <section className="about-safi-spotlight section-padding bg-light">
         <div className="container">
           <div style={{
-            background: 'linear-gradient(135deg, #041c14 0%, #064e3b 100%)',
+            background: 'linear-gradient(135deg, #06241b 0%, #031811 100%)',
             borderRadius: '28px',
             padding: '54px 44px',
             color: '#ffffff',
-            boxShadow: '0 20px 50px rgba(4, 28, 20, 0.2)',
+            boxShadow: '0 20px 50px rgba(6, 36, 27, 0.25)',
+            border: '1px solid #0e3b2d'
           }}>
             <div style={{ maxWidth: '820px' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(52, 211, 153, 0.15)', border: '1px solid rgba(52, 211, 153, 0.3)', padding: '5px 16px', borderRadius: '9999px', fontSize: '0.8rem', fontWeight: 700, color: '#34d399', marginBottom: '20px' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(194, 152, 83, 0.15)', border: '1px solid rgba(194, 152, 83, 0.3)', padding: '5px 16px', borderRadius: '9999px', fontSize: '0.8rem', fontWeight: 700, color: '#c29853', marginBottom: '20px' }}>
                 <Sparkles size={14} />
                 <span>OUR TECHNOLOGY · BUILT BY VALERIS</span>
               </div>
-              <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)', fontWeight: 800, color: '#ffffff', marginBottom: '18px', lineHeight: 1.2 }}>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.2rem, 3.8vw, 3rem)', fontWeight: 400, color: '#ffffff', marginBottom: '18px', lineHeight: 1.2 }}>
                 SAFI: Financial behaviour, built into banking.
               </h2>
-              <p style={{ fontSize: '1.1rem', color: '#f1f5f9', lineHeight: 1.65, marginBottom: '16px', fontWeight: 500 }}>
+              <p style={{ fontSize: '1.08rem', color: '#f1f5f9', lineHeight: 1.65, marginBottom: '16px', fontWeight: 400 }}>
                 SAFI is Valeris’ proprietary financial infrastructure product, built to help financial institutions give customers greater control over how they use their money.
               </p>
               <p style={{ fontSize: '0.98rem', color: '#cbd5e1', lineHeight: 1.65, marginBottom: '28px' }}>
@@ -237,8 +238,8 @@ export default function AboutPage() {
               </p>
 
               <div style={{
-                background: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
+                background: 'rgba(255, 255, 255, 0.06)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
                 borderRadius: '18px',
                 padding: '24px 28px',
                 marginBottom: '32px'
@@ -252,10 +253,10 @@ export default function AboutPage() {
               </div>
 
               <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-                <Link to="/safi" className="btn-primary" style={{ background: '#10b981', color: '#041c14', fontWeight: 800, padding: '14px 30px' }}>
+                <Link to="/safi" className="btn-primary" style={{ background: '#ffffff', color: '#06241b', fontWeight: 700, padding: '15px 32px', borderRadius: '9999px', boxShadow: '0 6px 20px rgba(0,0,0,0.25)' }}>
                   <span>Explore SAFI →</span>
                 </Link>
-                <Link to="/contact" className="btn-outline" style={{ borderColor: 'rgba(255,255,255,0.4)', color: '#ffffff', padding: '14px 28px' }}>
+                <Link to="/contact" className="btn-outline" style={{ borderColor: 'rgba(255,255,255,0.4)', color: '#ffffff', padding: '15px 30px', borderRadius: '9999px' }}>
                   <span>Talk to us</span>
                 </Link>
               </div>
