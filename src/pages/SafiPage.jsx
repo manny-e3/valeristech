@@ -512,21 +512,7 @@ export default function SafiPage() {
                 <p style={{ fontSize: '0.94rem', color: '#2b453a', lineHeight: 1.6, margin: '0 auto 20px', maxWidth: '440px' }}>
                   {responseMsg || "Thank you for joining. We’ve reserved your spot and will share updates as rollouts begin."}
                 </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsSubmitted(false);
-                    setFormData({ fullName: '', email: '', phone: '', source: '' });
-                    setResponseMsg('');
-                    try {
-                      localStorage.removeItem('safi_early_access_joined');
-                    } catch {}
-                  }}
-                  className="btn-outline"
-                  style={{ fontSize: '0.85rem', padding: '8px 20px', borderColor: '#06241b', color: '#06241b' }}
-                >
-                  Submit another contact
-                </button>
+
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="safi-form">
