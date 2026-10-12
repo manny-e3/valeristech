@@ -21,10 +21,10 @@ export default function SafiPage() {
     document.title = 'SAFI — Financial Behaviour Infrastructure | Valeris Technologies';
     window.scrollTo(0, 0);
 
-    const saved = localStorage.getItem('safi_early_access_joined');
-    if (saved) {
-      setIsSubmitted(true);
-    }
+    // Clear any past submission lock so form is always visible
+    try {
+      localStorage.removeItem('safi_early_access_joined');
+    } catch {}
   }, []);
 
   const scrollToEarlyAccess = (e) => {
@@ -90,14 +90,14 @@ export default function SafiPage() {
         if (res.ok && data?.success) {
           setIsSubmitted(true);
           setResponseMsg(data.message || 'Thank you for joining SAFI Early Access!');
-          try {
-            localStorage.setItem(
-              'safi_early_access_joined',
-              JSON.stringify({ ...formData, joinedAt: new Date().toISOString() })
-            );
-          } catch {
-            // Ignore localStorage errors
-          }
+          setFormData({
+            fullName: '',
+            email: '',
+            phone: '',
+            bank: '',
+            customBank: '',
+            source: '',
+          });
           success = true;
           break;
         } else if (data && data.message) {
@@ -510,19 +510,19 @@ export default function SafiPage() {
               Fill in your details to receive updates and be part of our early access community.
             </p>
 
-            {isSubmitted ? (
-              <div className="safi-success-alert">
-                <CheckCircle2 size={44} color="#059669" style={{ margin: '0 auto 14px' }} />
+            {isSubmitted && (
+              <div className="safi-success-alert" style={{ marginBottom: '24px' }}>
+                <CheckCircle2 size={40} color="#059669" style={{ margin: '0 auto 12px' }} />
                 <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#06241b', marginBottom: '8px' }}>
                   You’re on the early access list!
                 </h3>
-                <p style={{ fontSize: '0.94rem', color: '#2b453a', lineHeight: 1.6, margin: '0 auto 20px', maxWidth: '440px' }}>
+                <p style={{ fontSize: '0.94rem', color: '#2b453a', lineHeight: 1.6, margin: 0 }}>
                   {responseMsg || "Thank you for joining. We’ve reserved your spot and will share updates as rollouts begin."}
                 </p>
-
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="safi-form">
+            )}
+
+            <form onSubmit={handleSubmit} className="safi-form">
                 {submitError && (
                   <div style={{
                     backgroundColor: '#fef2f2',
@@ -661,7 +661,6 @@ export default function SafiPage() {
                   We’ll only use your information to share updates about SAFI and related opportunities.
                 </p>
               </form>
-            )}
           </div>
         </div>
       </section>
