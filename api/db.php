@@ -1,7 +1,7 @@
 <?php
 /**
  * Database Connection for SAFI Early Access API
- * Database: safi_early
+ * Database: u913128959_early (or local safi_early fallback)
  */
 
 $db_host = getenv('DB_HOST') ?: 'localhost';
@@ -21,11 +21,17 @@ $options = [
 try {
     $pdo = new PDO($dsn, $db_user, $db_pass, $options);
 } catch (PDOException $e) {
-    http_response_code(500);
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode([
-        'success' => false,
-        'message' => 'Database connection failed: ' . $e->getMessage()
-    ]);
-    exit;
+    // Fallback for local development if remote user is not present on localhost MySQL
+    try {
+        $localDsn = "mysql:host=localhost;port=3306;dbname=safi_early;charset=utf8mb4";
+        $pdo = new PDO($localDsn, 'root', '', $options);
+    } catch (PDOException $e2) {
+        http_response_code(500);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'success' => false,
+            'message' => 'Database connection failed: ' . $e->getMessage()
+        ]);
+        exit;
+    }
 }

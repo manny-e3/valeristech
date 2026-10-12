@@ -2,7 +2,7 @@
 /**
  * SAFI Early Access Submission API
  * Handles registration for SAFI Early Access Program
- * Database: safi_early
+ * Database: u913128959_early / safi_early
  */
 
 // Enable CORS
@@ -29,7 +29,7 @@ if ($requestMethod === 'GET') {
         echo json_encode([
             'success' => true,
             'message' => 'SAFI Early Access API is operational',
-            'database' => 'safi_early',
+            'database' => $db_name ?? 'safi_early',
             'total_registered' => (int)$count
         ]);
     } catch (Exception $e) {
@@ -72,6 +72,7 @@ if (!empty($_POST)) {
 $fullName = trim($data['fullName'] ?? $data['full_name'] ?? '');
 $email = trim($data['email'] ?? '');
 $phone = trim($data['phone'] ?? $data['phoneNumber'] ?? '');
+$bank = trim($data['bank'] ?? $data['userBank'] ?? $data['user_bank'] ?? '');
 $source = trim($data['source'] ?? $data['referral_source'] ?? '');
 
 // Validation
@@ -93,6 +94,10 @@ if (empty($email)) {
 
 if (!empty($phone) && mb_strlen($phone) > 50) {
     $errors['phone'] = 'Phone number must be under 50 characters.';
+}
+
+if (!empty($bank) && mb_strlen($bank) > 100) {
+    $bank = mb_substr($bank, 0, 100);
 }
 
 if (!empty($source) && mb_strlen($source) > 100) {
@@ -118,6 +123,21 @@ if (strpos($ipAddress, ',') !== false) {
 $ipAddress = substr($ipAddress, 0, 45);
 $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
 
+// Helper to ensure 'bank' column exists
+function ensureBankColumn($pdo, $table) {
+    try {
+        $stmt = $pdo->query("SHOW COLUMNS FROM `{$table}` LIKE 'bank'");
+        if (!$stmt->fetch()) {
+            $pdo->exec("ALTER TABLE `{$table}` ADD COLUMN `bank` VARCHAR(100) DEFAULT NULL AFTER `phone`");
+        }
+    } catch (Exception $e) {
+        // Silently continue if permission or already exists
+    }
+}
+
+ensureBankColumn($pdo, 'safi_early_access');
+ensureBankColumn($pdo, 'early_access');
+
 try {
     // Check if email already registered
     $checkStmt = $pdo->prepare("SELECT id FROM safi_early_access WHERE email = ? LIMIT 1");
@@ -130,6 +150,7 @@ try {
             UPDATE safi_early_access 
             SET full_name = ?, 
                 phone = COALESCE(NULLIF(?, ''), phone), 
+                bank = COALESCE(NULLIF(?, ''), bank),
                 source = COALESCE(NULLIF(?, ''), source),
                 ip_address = ?,
                 user_agent = ?,
@@ -139,6 +160,7 @@ try {
         $updateStmt->execute([
             $fullName,
             $phone ?: null,
+            $bank ?: null,
             $source ?: null,
             $ipAddress,
             $userAgent,
@@ -157,30 +179,32 @@ try {
     // Insert new registration into safi_early_access
     $insertStmt = $pdo->prepare("
         INSERT INTO safi_early_access 
-        (full_name, email, phone, source, ip_address, user_agent, status, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, 'pending', NOW(), NOW())
+        (full_name, email, phone, bank, source, ip_address, user_agent, status, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', NOW(), NOW())
     ");
     $insertStmt->execute([
         $fullName,
         $email,
         $phone ?: null,
+        $bank ?: null,
         $source ?: null,
         $ipAddress,
         $userAgent
     ]);
     $insertId = (int)$pdo->lastInsertId();
 
-    // Also populate early_access table for convenience
+    // Also populate early_access table for redundancy
     try {
         $insertSecondary = $pdo->prepare("
             INSERT INTO early_access 
-            (full_name, email, phone, source, ip_address, user_agent, status, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, 'pending', NOW(), NOW())
+            (full_name, email, phone, bank, source, ip_address, user_agent, status, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', NOW(), NOW())
         ");
         $insertSecondary->execute([
             $fullName,
             $email,
             $phone ?: null,
+            $bank ?: null,
             $source ?: null,
             $ipAddress,
             $userAgent

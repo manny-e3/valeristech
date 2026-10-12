@@ -6,6 +6,8 @@ export default function SafiPage() {
     fullName: '',
     email: '',
     phone: '',
+    bank: '',
+    customBank: '',
     source: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,10 +53,15 @@ export default function SafiPage() {
     setIsSubmitting(true);
     setSubmitError(null);
 
+    const resolvedBank = formData.bank === 'Other' && formData.customBank.trim()
+      ? formData.customBank.trim()
+      : formData.bank;
+
     const payload = {
       fullName: formData.fullName.trim(),
       email: formData.email.trim(),
       phone: formData.phone.trim(),
+      bank: resolvedBank.trim(),
       source: formData.source,
     };
 
@@ -567,6 +574,52 @@ export default function SafiPage() {
                     autoComplete="tel"
                   />
                 </div>
+
+                <div className="safi-form-group">
+                  <div className="safi-select-wrap">
+                    <select
+                      name="bank"
+                      value={formData.bank}
+                      onChange={handleInputChange}
+                      className="safi-select"
+                    >
+                      <option value="">Which bank do you use? (Primary Bank)</option>
+                      <option value="Access Bank">Access Bank</option>
+                      <option value="GTBank">GTBank (Guaranty Trust Bank)</option>
+                      <option value="Zenith Bank">Zenith Bank</option>
+                      <option value="First Bank">First Bank of Nigeria</option>
+                      <option value="UBA">United Bank for Africa (UBA)</option>
+                      <option value="Kuda Bank">Kuda Bank</option>
+                      <option value="OPay">OPay</option>
+                      <option value="Moniepoint">Moniepoint</option>
+                      <option value="Stanbic IBTC">Stanbic IBTC Bank</option>
+                      <option value="Fidelity Bank">Fidelity Bank</option>
+                      <option value="FCMB">First City Monument Bank (FCMB)</option>
+                      <option value="Sterling Bank">Sterling Bank</option>
+                      <option value="Wema Bank / ALAT">Wema Bank / ALAT</option>
+                      <option value="Union Bank">Union Bank</option>
+                      <option value="Polaris Bank">Polaris Bank</option>
+                      <option value="Ecobank">Ecobank</option>
+                      <option value="Standard Chartered">Standard Chartered</option>
+                      <option value="Other">Other Bank (specify below)</option>
+                    </select>
+                    <ChevronDown size={18} className="safi-select-chevron" />
+                  </div>
+                </div>
+
+                {formData.bank === 'Other' && (
+                  <div className="safi-form-group">
+                    <input
+                      type="text"
+                      name="customBank"
+                      value={formData.customBank}
+                      onChange={handleInputChange}
+                      placeholder="Please specify your bank name"
+                      className="safi-input"
+                      autoFocus
+                    />
+                  </div>
+                )}
 
                 <div className="safi-form-group">
                   <div className="safi-select-wrap">
