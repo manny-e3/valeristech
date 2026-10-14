@@ -21,8 +21,13 @@ if ($requestMethod === 'OPTIONS') {
 
 require_once __DIR__ . '/db.php';
 
-// Health check / stats on GET
+// Health check / stats or list on GET
 if ($requestMethod === 'GET') {
+    if ((isset($_GET['action']) && in_array($_GET['action'], ['list', 'records', 'admin'])) || isset($_GET['export'])) {
+        require __DIR__ . '/admin-early-access.php';
+        exit;
+    }
+
     try {
         $stmt = $pdo->query("SELECT COUNT(*) AS total FROM safi_early_access");
         $count = $stmt->fetchColumn();
