@@ -68,6 +68,15 @@ export default function Navbar({ onOpenSearch, onOpenOffcanvas }) {
 
             <li className="nav-item">
               <NavLink
+                to="/early-access"
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              >
+                Early Access
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink
                 to="/contact"
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
               >

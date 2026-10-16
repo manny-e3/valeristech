@@ -36,6 +36,7 @@ export default function Footer() {
               <li><Link to="/about" style={{ color: '#9cb3a5', transition: 'color 0.2s' }}>About</Link></li>
               <li><Link to="/services" style={{ color: '#9cb3a5', transition: 'color 0.2s' }}>Capabilities</Link></li>
               <li><Link to="/safi" style={{ color: '#9cb3a5', transition: 'color 0.2s' }}>SAFI</Link></li>
+              <li><Link to="/early-access" style={{ color: '#34d399', fontWeight: 600, transition: 'color 0.2s' }}>Early Access</Link></li>
               <li><Link to="/contact" style={{ color: '#9cb3a5', transition: 'color 0.2s' }}>Contact</Link></li>
             </ul>
           </div>

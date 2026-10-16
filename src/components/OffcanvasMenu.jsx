@@ -29,6 +29,7 @@ export default function OffcanvasMenu({ isOpen, onClose }) {
               <li><Link to="/about" onClick={onClose}>About</Link></li>
               <li><Link to="/services" onClick={onClose}>Capabilities</Link></li>
               <li><Link to="/safi" onClick={onClose}>SAFI</Link></li>
+              <li><Link to="/early-access" onClick={onClose} style={{ color: '#059669', fontWeight: 700 }}>Early Access</Link></li>
               <li><Link to="/contact" onClick={onClose}>Contact</Link></li>
             </ul>
           </nav>

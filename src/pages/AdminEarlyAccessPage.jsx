@@ -235,6 +235,9 @@ export default function AdminEarlyAccessPage({ embedded = false }) {
         'Email Address': r.email || '',
         'Phone Number': r.phone ? String(r.phone) : 'N/A',
         'Commercial Bank': r.bank || 'Not Specified',
+        'Bank Interest': r.bank_interest || 'Yes, I would be interested.',
+        'NDA Agreed': r.nda_agreed || 'I agree.',
+        'Consent': r.consent_contact || 'Yes',
         'Referral Source': r.source || 'Direct',
         'Registration Date': r.created_at ? new Date(r.created_at).toLocaleString('en-GB') : 'Recent'
       }));
@@ -246,6 +249,9 @@ export default function AdminEarlyAccessPage({ embedded = false }) {
         { wch: 32 }, // Email Address
         { wch: 20 }, // Phone Number
         { wch: 22 }, // Commercial Bank
+        { wch: 24 }, // Bank Interest
+        { wch: 16 }, // NDA Agreed
+        { wch: 14 }, // Consent
         { wch: 20 }, // Referral Source
         { wch: 22 }  // Registration Date
       ];
@@ -278,6 +284,9 @@ export default function AdminEarlyAccessPage({ embedded = false }) {
         'Email Address': r.email || '',
         'Phone Number': r.phone ? String(r.phone) : 'N/A',
         'Commercial Bank': r.bank || 'Not Specified',
+        'Bank Interest': r.bank_interest || 'Yes, I would be interested.',
+        'NDA Agreed': r.nda_agreed || 'I agree.',
+        'Consent': r.consent_contact || 'Yes',
         'Referral Source': r.source || 'Direct',
         'Registration Date': r.created_at ? new Date(r.created_at).toLocaleString('en-GB') : 'Recent'
       }));

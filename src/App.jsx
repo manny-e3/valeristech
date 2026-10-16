@@ -15,6 +15,8 @@ import AboutPage from './pages/AboutPage';
 import ServicesPage from './pages/ServicesPage';
 import SafiPage from './pages/SafiPage';
 import ContactPage from './pages/ContactPage';
+import EarlyAccessPage from './pages/EarlyAccessPage';
+import EmailPreviewPage from './pages/EmailPreviewPage';
 
 // Admin Authentication & Pages
 import { AdminAuthProvider } from './context/AdminAuthContext';
@@ -110,6 +112,22 @@ export default function App() {
                 <ContactPage />
               </MainSiteLayout>
             } 
+          />
+          <Route 
+            path="/early-access" 
+            element={
+              <MainSiteLayout>
+                <EarlyAccessPage />
+              </MainSiteLayout>
+            } 
+          />
+          <Route 
+            path="/safi/early-access" 
+            element={<Navigate to="/early-access" replace />} 
+          />
+          <Route 
+            path="/email-preview" 
+            element={<EmailPreviewPage />} 
           />
 
           {/* =========================================================

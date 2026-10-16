@@ -1,122 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, ChevronDown, ChevronUp, Sparkles, Building2, Shield, Lock, Layers } from 'lucide-react';
 
 export default function SafiPage() {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    bank: '',
-    customBank: '',
-    source: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
-  const [responseMsg, setResponseMsg] = useState('');
   const [showBudgetingModal, setShowBudgetingModal] = useState(false);
   const [showTechAccordion, setShowTechAccordion] = useState(false);
 
   useEffect(() => {
     document.title = 'SAFI — Financial Behaviour Infrastructure | Valeris Technologies';
     window.scrollTo(0, 0);
-
-    // Clear any past submission lock so form is always visible
-    try {
-      localStorage.removeItem('safi_early_access_joined');
-    } catch {}
   }, []);
-
-  const scrollToEarlyAccess = (e) => {
-    if (e) e.preventDefault();
-    const el = document.getElementById('early-access');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      const firstInput = el.querySelector('input');
-      if (firstInput) firstInput.focus();
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (submitError) setSubmitError(null);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.fullName.trim() || !formData.email.trim()) {
-      setSubmitError('Please provide your full name and email address.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    setSubmitError(null);
-
-    const resolvedBank = formData.bank === 'Other' && formData.customBank.trim()
-      ? formData.customBank.trim()
-      : formData.bank;
-
-    const payload = {
-      fullName: formData.fullName.trim(),
-      email: formData.email.trim(),
-      phone: formData.phone.trim(),
-      bank: resolvedBank.trim(),
-      source: formData.source,
-    };
-
-    // Candidates: primary relative endpoint or direct Apache URL
-    const endpoints = [
-      '/api/early-access.php',
-      'http://localhost/safi/valeristechltd/api/early-access.php',
-    ];
-
-    let lastError = null;
-    let success = false;
-
-    for (const url of endpoints) {
-      try {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
-
-        const data = await res.json().catch(() => null);
-
-        if (res.ok && data?.success) {
-          setIsSubmitted(true);
-          setResponseMsg(data.message || 'Thank you for joining SAFI Early Access!');
-          setFormData({
-            fullName: '',
-            email: '',
-            phone: '',
-            bank: '',
-            customBank: '',
-            source: '',
-          });
-          success = true;
-          break;
-        } else if (data && data.message) {
-          lastError = data.message;
-          break; // Validation or explicit message from server
-        } else {
-          lastError = `Server responded with status ${res.status}`;
-        }
-      } catch (err) {
-        lastError = err.message || 'Network error';
-      }
-    }
-
-    if (!success) {
-      setSubmitError(lastError || 'Unable to submit at this time. Please check your connection.');
-    }
-
-    setIsSubmitting(false);
-  };
 
   return (
     <div className="safi-editorial-page">
@@ -162,15 +55,14 @@ export default function SafiPage() {
 
               {/* CTA & Subtext */}
               <div className="safi-hero-actions">
-                <a
-                  href="#early-access"
-                  onClick={scrollToEarlyAccess}
+                <Link
+                  to="/early-access"
                   className="safi-btn-hero"
                   id="hero-early-access-btn"
                 >
                   <span>Join Early Access</span>
                   <span className="safi-arrow-glyph">→</span>
-                </a>
+                </Link>
                 <span className="safi-hero-subtext">
                   Be part of what’s next.
                 </span>
@@ -336,15 +228,14 @@ export default function SafiPage() {
                 in upcoming opportunities and be among the first to experience a new
                 approach to managing your money, built around your goals and real life.
               </p>
-              <a
-                href="#early-access"
-                onClick={scrollToEarlyAccess}
+              <Link
+                to="/early-access"
                 className="safi-btn-white"
                 id="banner-early-access-btn"
               >
                 <span>Join Early Access</span>
                 <span className="safi-arrow-glyph">→</span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -499,168 +390,37 @@ export default function SafiPage() {
       </section>
 
       {/* =====================================================================
-          6. "JOIN SAFI EARLY ACCESS" FORM CARD
+          6. "JOIN SAFI EARLY ACCESS" INVITATION SECTION
           ===================================================================== */}
       <section className="safi-form-section" id="early-access">
         <div className="container">
-          <div className="safi-form-card">
-            <h2 className="safi-form-title">Join SAFI Early Access</h2>
-            <div className="safi-accent-bar" />
-            <p className="safi-form-desc">
-              Fill in your details to receive updates and be part of our early access community.
+          <div className="safi-form-card" style={{ textAlign: 'center', padding: '56px 36px', maxWidth: '680px', margin: '0 auto' }}>
+            <span className="safi-badge-early" style={{ marginBottom: '16px', display: 'inline-block' }}>
+              EARLY ACCESS PROGRAM · COHORT 1
+            </span>
+            <h2 className="safi-form-title" style={{ fontSize: 'clamp(2rem, 3.2vw, 2.6rem)', marginBottom: '14px' }}>
+              Join SAFI Early Access
+            </h2>
+            <div className="safi-accent-bar" style={{ margin: '0 auto 16px' }} />
+            <p className="safi-form-desc" style={{ maxWidth: '580px', margin: '0 auto 30px', fontSize: '1.02rem', lineHeight: 1.65 }}>
+              Be among the first to experience embedded financial behaviour infrastructure directly inside your bank. Complete our streamlined early access expression of interest.
             </p>
 
-            {isSubmitted && (
-              <div className="safi-success-alert" style={{ marginBottom: '24px' }}>
-                <CheckCircle2 size={40} color="#059669" style={{ margin: '0 auto 12px' }} />
-                <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#06241b', marginBottom: '8px' }}>
-                  You’re on the early access list!
-                </h3>
-                <p style={{ fontSize: '0.94rem', color: '#2b453a', lineHeight: 1.6, margin: 0 }}>
-                  {responseMsg || "Thank you for joining. We’ve reserved your spot and will share updates as rollouts begin."}
-                </p>
-              </div>
-            )}
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+              <Link
+                to="/early-access"
+                className="safi-submit-btn"
+                id="goto-early-access-btn"
+                style={{ maxWidth: '360px', textDecoration: 'none' }}
+              >
+                <span>Open Early Access Application</span>
+                <span className="safi-arrow-glyph">→</span>
+              </Link>
+            </div>
 
-            <form onSubmit={handleSubmit} className="safi-form">
-                {submitError && (
-                  <div style={{
-                    backgroundColor: '#fef2f2',
-                    border: '1px solid #fecaca',
-                    color: '#991b1b',
-                    padding: '12px 16px',
-                    borderRadius: '10px',
-                    fontSize: '0.88rem',
-                    marginBottom: '18px',
-                    textAlign: 'left'
-                  }}>
-                    {submitError}
-                  </div>
-                )}
-                <div className="safi-form-group">
-                  <input
-                    type="text"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    placeholder="Full Name"
-                    required
-                    className="safi-input"
-                    autoComplete="name"
-                  />
-                </div>
-
-                <div className="safi-form-group">
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="Email Address"
-                    required
-                    className="safi-input"
-                    autoComplete="email"
-                  />
-                </div>
-
-                <div className="safi-form-group">
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="Phone Number (Optional)"
-                    className="safi-input"
-                    autoComplete="tel"
-                  />
-                </div>
-
-                <div className="safi-form-group">
-                  <div className="safi-select-wrap">
-                    <select
-                      name="bank"
-                      value={formData.bank}
-                      onChange={handleInputChange}
-                      className="safi-select"
-                    >
-                      <option value="">Which bank do you use? (Primary Bank)</option>
-                      <option value="Access Bank">Access Bank</option>
-                      <option value="GTBank">GTBank (Guaranty Trust Bank)</option>
-                      <option value="Zenith Bank">Zenith Bank</option>
-                      <option value="First Bank">First Bank of Nigeria</option>
-                      <option value="UBA">United Bank for Africa (UBA)</option>
-                      <option value="Kuda Bank">Kuda Bank</option>
-                      <option value="OPay">OPay</option>
-                      <option value="Moniepoint">Moniepoint</option>
-                      <option value="Stanbic IBTC">Stanbic IBTC Bank</option>
-                      <option value="Fidelity Bank">Fidelity Bank</option>
-                      <option value="FCMB">First City Monument Bank (FCMB)</option>
-                      <option value="Sterling Bank">Sterling Bank</option>
-                      <option value="Wema Bank / ALAT">Wema Bank / ALAT</option>
-                      <option value="Union Bank">Union Bank</option>
-                      <option value="Polaris Bank">Polaris Bank</option>
-                      <option value="Ecobank">Ecobank</option>
-                      <option value="Standard Chartered">Standard Chartered</option>
-                      <option value="Other">Other Bank (specify below)</option>
-                    </select>
-                    <ChevronDown size={18} className="safi-select-chevron" />
-                  </div>
-                </div>
-
-                {formData.bank === 'Other' && (
-                  <div className="safi-form-group">
-                    <input
-                      type="text"
-                      name="customBank"
-                      value={formData.customBank}
-                      onChange={handleInputChange}
-                      placeholder="Please specify your bank name"
-                      className="safi-input"
-                      autoFocus
-                    />
-                  </div>
-                )}
-
-                <div className="safi-form-group">
-                  <div className="safi-select-wrap">
-                    <select
-                      name="source"
-                      value={formData.source}
-                      onChange={handleInputChange}
-                      className="safi-select"
-                    >
-                      <option value="">How did you hear about SAFI?</option>
-                      <option value="Social Media">Social Media</option>
-                      <option value="Friend / Colleague">Friend or Colleague</option>
-                      <option value="Bank Partner">Bank Partner / Financial Institution</option>
-                      <option value="News / Article">News, Article or Tech Publication</option>
-                      <option value="Search Engine">Search Engine</option>
-                      <option value="Other">Other</option>
-                    </select>
-                    <ChevronDown size={18} className="safi-select-chevron" />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="safi-submit-btn"
-                  id="submit-early-access-btn"
-                >
-                  {isSubmitting ? (
-                    <span>Registering...</span>
-                  ) : (
-                    <>
-                      <span>Join Early Access</span>
-                      <span className="safi-arrow-glyph">→</span>
-                    </>
-                  )}
-                </button>
-
-                <p className="safi-form-disclaimer">
-                  We’ll only use your information to share updates about SAFI and related opportunities.
-                </p>
-              </form>
+            <p className="safi-form-disclaimer" style={{ margin: 0 }}>
+              🔒 Confidentiality Undertaking (NDA) · Takes under 60 seconds
+            </p>
           </div>
         </div>
       </section>

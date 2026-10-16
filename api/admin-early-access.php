@@ -76,7 +76,7 @@ if ($requestMethod === 'GET' && isset($_GET['export'])) {
             }
 
             $whereSql = !empty($whereClauses) ? 'WHERE ' . implode(' AND ', $whereClauses) : '';
-            $sql = "SELECT id, full_name, email, phone, bank, source, status, ip_address, created_at 
+            $sql = "SELECT id, full_name, email, phone, bank, bank_interest, nda_agreed, consent_contact, source, status, ip_address, created_at 
                     FROM `{$tableName}` 
                     {$whereSql} 
                     ORDER BY id DESC";
@@ -226,6 +226,9 @@ if ($requestMethod === 'GET' && isset($_GET['export'])) {
     <Cell ss:StyleID="HeaderStyle"><Data ss:Type="String">Email Address</Data></Cell>
     <Cell ss:StyleID="HeaderStyle"><Data ss:Type="String">Phone Number</Data></Cell>
     <Cell ss:StyleID="HeaderStyle"><Data ss:Type="String">Commercial Bank</Data></Cell>
+    <Cell ss:StyleID="HeaderStyle"><Data ss:Type="String">Bank Interest</Data></Cell>
+    <Cell ss:StyleID="HeaderStyle"><Data ss:Type="String">NDA Agreed</Data></Cell>
+    <Cell ss:StyleID="HeaderStyle"><Data ss:Type="String">Consent</Data></Cell>
     <Cell ss:StyleID="HeaderStyle"><Data ss:Type="String">Referral Source</Data></Cell>
     <Cell ss:StyleID="HeaderStyle"><Data ss:Type="String">Status</Data></Cell>
     <Cell ss:StyleID="HeaderStyle"><Data ss:Type="String">IP Address</Data></Cell>
@@ -249,6 +252,9 @@ if ($requestMethod === 'GET' && isset($_GET['export'])) {
     <Cell ss:StyleID="<?php echo $baseStyle; ?>"><Data ss:Type="String"><?php echo $xmlEscape($r['email']); ?></Data></Cell>
     <Cell ss:StyleID="PhoneStyle"><Data ss:Type="String"><?php echo $xmlEscape($r['phone'] ?: 'N/A'); ?></Data></Cell>
     <Cell ss:StyleID="<?php echo $baseStyle; ?>"><Data ss:Type="String"><?php echo $xmlEscape($r['bank'] ?: 'Not Specified'); ?></Data></Cell>
+    <Cell ss:StyleID="<?php echo $baseStyle; ?>"><Data ss:Type="String"><?php echo $xmlEscape($r['bank_interest'] ?? 'Yes, I would be interested.'); ?></Data></Cell>
+    <Cell ss:StyleID="<?php echo $baseStyle; ?>"><Data ss:Type="String"><?php echo $xmlEscape($r['nda_agreed'] ?? 'I agree.'); ?></Data></Cell>
+    <Cell ss:StyleID="<?php echo $baseStyle; ?>"><Data ss:Type="String"><?php echo $xmlEscape($r['consent_contact'] ?? 'Yes'); ?></Data></Cell>
     <Cell ss:StyleID="<?php echo $baseStyle; ?>"><Data ss:Type="String"><?php echo $xmlEscape($r['source'] ?: 'Direct'); ?></Data></Cell>
     <Cell ss:StyleID="<?php echo $statusStyle; ?>"><Data ss:Type="String"><?php echo $xmlEscape(ucfirst($status)); ?></Data></Cell>
     <Cell ss:StyleID="CenterStyle"><Data ss:Type="String"><?php echo $xmlEscape($r['ip_address'] ?: 'N/A'); ?></Data></Cell>
@@ -278,7 +284,7 @@ if ($requestMethod === 'GET' && isset($_GET['export'])) {
                 fprintf($out, chr(0xEF).chr(0xBB).chr(0xBF));
 
                 // Header Row
-                fputcsv($out, ['ID', 'Full Name', 'Email Address', 'Phone Number', 'Commercial Bank', 'Referral Source', 'Registration Date']);
+                fputcsv($out, ['ID', 'Full Name', 'Email Address', 'Phone Number', 'Commercial Bank', 'Bank Interest', 'NDA Agreed', 'Consent', 'Referral Source', 'Registration Date']);
 
                 foreach ($rows as $r) {
                     fputcsv($out, [
@@ -287,6 +293,9 @@ if ($requestMethod === 'GET' && isset($_GET['export'])) {
                         $r['email'],
                         $r['phone'] ?: 'N/A',
                         $r['bank'] ?: 'Not Specified',
+                        $r['bank_interest'] ?? 'Yes, I would be interested.',
+                        $r['nda_agreed'] ?? 'I agree.',
+                        $r['consent_contact'] ?? 'Yes',
                         $r['source'] ?: 'Direct',
                         $r['created_at']
                     ]);
@@ -349,7 +358,7 @@ if ($requestMethod === 'GET') {
         $whereSql = !empty($whereClauses) ? 'WHERE ' . implode(' AND ', $whereClauses) : '';
 
         // Query filtered records
-        $sql = "SELECT id, full_name, email, phone, bank, source, status, ip_address, created_at, updated_at 
+        $sql = "SELECT id, full_name, email, phone, bank, bank_interest, nda_agreed, consent_contact, source, status, ip_address, created_at, updated_at 
                 FROM `{$tableName}` 
                 {$whereSql} 
                 ORDER BY id DESC 

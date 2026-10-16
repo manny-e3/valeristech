@@ -16,7 +16,7 @@ const slides = [
     },
     secondaryBtn: {
       text: 'Join Early Access',
-      to: '/safi#early-access',
+      to: '/early-access',
       isInternal: true,
     },
     bgImage: '/images/safi/safi-hero-desk.jpg',
