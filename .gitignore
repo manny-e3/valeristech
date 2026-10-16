@@ -11,6 +11,13 @@ node_modules
 dist
 dist-ssr
 *.local
+*.local.php
+config.local.php
+api/config.local.php
+public/api/config.local.php
+.env
+.env.*
+!.env.example
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +29,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+

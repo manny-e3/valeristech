@@ -14,29 +14,43 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json; charset=UTF-8");
 
 // Handle CORS Pre-flight
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+$requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+if ($requestMethod === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+if ($requestMethod !== 'POST') {
     http_response_code(405);
     echo json_encode(["success" => false, "error" => "Method not allowed"]);
     exit;
 }
 
 // -----------------------------------------------------------------------------
-// 1. CONFIGURATION: Set your Hostinger Email Account credentials here
+// 1. CONFIGURATION: Load Hostinger Email Account credentials
 // -----------------------------------------------------------------------------
-$smtp_host     = "smtp.hostinger.com";
-$smtp_port     = 465; // SSL port (use 587 for TLS)
+if (file_exists(__DIR__ . '/config.local.php')) {
+    require_once __DIR__ . '/config.local.php';
+} elseif (file_exists(dirname(dirname(__DIR__)) . '/api/config.local.php')) {
+    require_once dirname(dirname(__DIR__)) . '/api/config.local.php';
+} elseif (file_exists(dirname(__DIR__) . '/../api/config.local.php')) {
+    require_once dirname(__DIR__) . '/../api/config.local.php';
+}
 
-// Replace these with your actual Hostinger email account details:
-$smtp_username = "esther.ehighelua@valeristechltd.com";       // e.g. info@yourdomain.com created in Hostinger
-$smtp_password = ";6:LH>XQGGn";    // Your Hostinger email account password
+$smtp_host     = getenv('SMTP_HOST') ?: "smtp.hostinger.com";
+$smtp_port     = (int)(getenv('SMTP_PORT') ?: 465); // SSL port (use 587 for TLS)
+
+// Read credentials securely from environment / config.local.php (do NOT commit secrets to git)
+$smtp_username = getenv('SMTP_USER') ?: "";
+$smtp_password = getenv('SMTP_PASS') ?: "";
 
 // Where incoming inquiries should be delivered:
-$recipient_email = "esther.ehighelua@valeristechltd.com"; 
+$recipient_email = getenv('CONTACT_RECIPIENT') ?: ($smtp_username ?: "info@valeristechltd.com");
+
+if (empty($smtp_username) || empty($smtp_password)) {
+    echo json_encode(["success" => false, "error" => "Mail server credentials not configured."]);
+    exit;
+} 
 
 // -----------------------------------------------------------------------------
 // 2. RECEIVE & SANITIZE INPUT

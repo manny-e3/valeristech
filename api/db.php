@@ -4,13 +4,21 @@
  * Database: u913128959_early (or local safi_early fallback)
  */
 
+// Load local credentials if present (not tracked in Git)
+if (file_exists(__DIR__ . '/config.local.php')) {
+    require_once __DIR__ . '/config.local.php';
+} elseif (file_exists(dirname(__DIR__) . '/api/config.local.php')) {
+    require_once dirname(__DIR__) . '/api/config.local.php';
+}
+
 $db_host = getenv('DB_HOST') ?: 'localhost';
 $db_port = getenv('DB_PORT') ?: '3306';
 $db_name = getenv('DB_NAME') ?: 'u913128959_early';
 $db_user = getenv('DB_USER') ?: 'u913128959_early';
-$db_pass = getenv('DB_PASS') !== false ? getenv('DB_PASS') : '$nU1PU5&+';
+$db_pass = getenv('DB_PASS') !== false ? getenv('DB_PASS') : '';
 
 $dsn = "mysql:host={$db_host};port={$db_port};dbname={$db_name};charset=utf8mb4";
+
 
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,

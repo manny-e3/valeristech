@@ -4,6 +4,14 @@
  * Supports Hostinger Authenticated SMTP (Port 465 SSL / 587 TLS) with native fallback.
  */
 
+// Load local credentials if present (not tracked in Git)
+if (file_exists(__DIR__ . '/config.local.php')) {
+    require_once __DIR__ . '/config.local.php';
+} elseif (file_exists(dirname(__DIR__) . '/api/config.local.php')) {
+    require_once dirname(__DIR__) . '/api/config.local.php';
+}
+
+
 /**
  * Generate the Luxury HTML Email Template for SAFI Early Access Confirmation
  * 
@@ -409,15 +417,19 @@ function sendEarlyAccessConfirmation($recipientEmail, $recipientName, $bank = ''
         return ["success" => false, "error" => "Invalid recipient email"];
     }
 
-    // Hostinger SMTP configuration
-    $smtp_host     = "smtp.hostinger.com";
-    $smtp_port     = 465;
-    $smtp_username = "esther.ehighelua@valeristechltd.com";
-    $smtp_password = ";6:LH>XQGGn";
+    // Hostinger SMTP configuration from environment or config.local.php
+    $smtp_host     = getenv('SMTP_HOST') ?: "smtp.hostinger.com";
+    $smtp_port     = (int)(getenv('SMTP_PORT') ?: 465);
+    $smtp_username = getenv('SMTP_USER') ?: "";
+    $smtp_password = getenv('SMTP_PASS') ?: "";
     $from_name     = "Team SAFI | Valeris Technologies";
-    $from_email    = $smtp_username;
-    $reply_to      = "info@valeristechltd.com";
+    $from_email    = $smtp_username ?: "info@valeristechltd.com";
+    $reply_to      = getenv('CONTACT_RECIPIENT') ?: "info@valeristechltd.com";
     $subject       = "Thank you for your interest in SAFI!";
+
+    if (empty($smtp_username) || empty($smtp_password)) {
+        return ["success" => false, "error" => "SMTP credentials not configured in environment or config.local.php"];
+    }
 
     $bodyHtml = getEarlyAccessEmailTemplate($recipientName, $bank);
 
