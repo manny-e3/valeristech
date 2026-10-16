@@ -4,11 +4,11 @@
  * Database: u913128959_early (or local safi_early fallback)
  */
 
-// Load local credentials if present (not tracked in Git)
-if (file_exists(__DIR__ . '/config.local.php')) {
-    require_once __DIR__ . '/config.local.php';
-} elseif (file_exists(dirname(__DIR__) . '/api/config.local.php')) {
-    require_once dirname(__DIR__) . '/api/config.local.php';
+// Load environment variables (.env / config.local.php)
+if (file_exists(__DIR__ . '/env-loader.php')) {
+    require_once __DIR__ . '/env-loader.php';
+} elseif (file_exists(dirname(__DIR__) . '/api/env-loader.php')) {
+    require_once dirname(__DIR__) . '/api/env-loader.php';
 }
 
 $db_host = getenv('DB_HOST') ?: 'localhost';

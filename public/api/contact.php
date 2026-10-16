@@ -29,12 +29,12 @@ if ($requestMethod !== 'POST') {
 // -----------------------------------------------------------------------------
 // 1. CONFIGURATION: Load Hostinger Email Account credentials
 // -----------------------------------------------------------------------------
-if (file_exists(__DIR__ . '/config.local.php')) {
+if (file_exists(dirname(dirname(__DIR__)) . '/api/env-loader.php')) {
+    require_once dirname(dirname(__DIR__)) . '/api/env-loader.php';
+} elseif (file_exists(dirname(__DIR__) . '/../api/env-loader.php')) {
+    require_once dirname(__DIR__) . '/../api/env-loader.php';
+} elseif (file_exists(__DIR__ . '/config.local.php')) {
     require_once __DIR__ . '/config.local.php';
-} elseif (file_exists(dirname(dirname(__DIR__)) . '/api/config.local.php')) {
-    require_once dirname(dirname(__DIR__)) . '/api/config.local.php';
-} elseif (file_exists(dirname(__DIR__) . '/../api/config.local.php')) {
-    require_once dirname(__DIR__) . '/../api/config.local.php';
 }
 
 $smtp_host     = getenv('SMTP_HOST') ?: "smtp.hostinger.com";
